@@ -21,6 +21,8 @@ public class UserBL{
 	}
 	
 	
+	
+	
 	//Get a user with by username and password
 	public List<User> getUserByUsername(String username, String password){
 		
@@ -29,6 +31,15 @@ public class UserBL{
 		example.setPassword(password);
 		example.setUsername(username);
 		
+		
+		return userRepository.findAll(Example.of(example));
+	}
+	
+	//get user by username only
+	public List<User> getByUsername(String username){
+		User example = new User();
+		
+		example.setUsername(username);
 		
 		return userRepository.findAll(Example.of(example));
 	}
