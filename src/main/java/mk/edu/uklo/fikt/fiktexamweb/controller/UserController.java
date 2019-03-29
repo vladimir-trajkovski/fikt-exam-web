@@ -31,9 +31,14 @@ public class UserController {
 		return userBl.getUserByUsername(username, password);
 	}
 	
-	@PostMapping({"/post"})
-	public User addUser(@Valid @RequestBody User user) {
-		return userBl.createUser(user);
+	@PostMapping({"/post/teacher"})
+	public User addTeacher(@Valid @RequestBody User user) {
+		return userBl.createTeacher(user);
+	}
+	
+	@PostMapping({"/post/student"})
+	public User addStudent(@Valid @RequestBody User user) {
+		return userBl.createStudent(user);
 	}
 
 }

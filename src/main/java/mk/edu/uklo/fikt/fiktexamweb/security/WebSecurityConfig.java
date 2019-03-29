@@ -3,6 +3,9 @@ package mk.edu.uklo.fikt.fiktexamweb.security;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,13 +21,19 @@ import mk.edu.uklo.fikt.fiktexamweb.util.UserRepository;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
+	DataSource dataSource;
+		
+	
+	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder authenticationMgr) throws Exception{
-		authenticationMgr.inMemoryAuthentication()
-		.withUser("hristijan112").password("{noop}396285ak").authorities("ROLE_STUDENT");
+//		authenticationMgr.inMemoryAuthentication()
+//		.withUser("hristijan112").password("{noop}396285ak").authorities("ROLE_STUDENT");
+		
+		authenticationMgr.jdbcAuthentication().dataSource(dataSource)
+		.usersByUsernameQuery("select username, password from User where USERNAME=?");
 	}
 	
 	
-	//Temporary solution for forbidden POST request
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.authorizeRequests().antMatchers("/user/get/*", "/user/get*").hasRole("STUDENT")

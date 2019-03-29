@@ -44,13 +44,20 @@ public class UserBL{
 		return userRepository.findAll(Example.of(example));
 	}
 	
-	//Create new user (Teacher or Student)
-	public User createUser(User user) {
-		
-		user.setToken("123123");
+	
+	//Create new user - teacher
+	public User createTeacher(User user) {
+		user.setBrIndex(null);
+		user.setRole("Teacher");
+		user.setToken("123321");
 		return userRepository.save(user);
 	}
 	
-	
+	//Create new user - Student
+	public User createStudent(User user) {
+		user.setRole("Student");
+		user.setToken("123321");
+		return userRepository.save(user);
+	}
 	
 }
