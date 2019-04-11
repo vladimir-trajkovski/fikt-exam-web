@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,8 @@ public class SubjectController {
 	@Autowired
 	SubjectBL subjectBl;
 	
+	
+	@PreAuthorize("hasAnyRole('Admin')")
 	@GetMapping({"/get"})
 	public List<Subject> getAllSubjects(){
 		return subjectBl.getSubjects();

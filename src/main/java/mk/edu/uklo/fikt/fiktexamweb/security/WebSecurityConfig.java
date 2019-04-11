@@ -7,43 +7,65 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import mk.edu.uklo.fikt.fiktexamweb.util.CustomUserDetailsService;
 import mk.edu.uklo.fikt.fiktexamweb.util.UserBL;
 import mk.edu.uklo.fikt.fiktexamweb.util.UserRepository;
 
-
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableJpaRepositories(basePackageClasses = UserRepository.class)
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	DataSource dataSource;
+	CustomUserDetailsService userDetailsService;
 		
 	
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder authenticationMgr) throws Exception{
-//		authenticationMgr.inMemoryAuthentication()
-//		.withUser("hristijan112").password("{noop}396285ak").authorities("ROLE_STUDENT");
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
 		
-		authenticationMgr.jdbcAuthentication().dataSource(dataSource)
-		.usersByUsernameQuery("select username, password from User where USERNAME=?");
+		auth.userDetailsService(userDetailsService)
+		.passwordEncoder(getPasswordEncoder());
+		
 	}
 	
 	
+	private PasswordEncoder getPasswordEncoder() {
+		return new PasswordEncoder() {
+			@Override
+			public String encode(CharSequence charSequence) {
+				return BCrypt.hashpw(charSequence.toString(), BCrypt.gensalt(4));
+			}
+
+			@Override
+			public boolean matches(CharSequence rawPassword, String encodedPassword) {
+				return BCrypt.checkpw(rawPassword.toString(), encodedPassword);
+			}
+			
+		};
+	}
+
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
-		http.authorizeRequests().antMatchers("/user/get/*", "/user/get*").hasRole("STUDENT")
+		
+		http.csrf().disable();
+		http
+		.authorizeRequests()
+		.antMatchers("**/user**").authenticated()
+		.anyRequest().permitAll()
 		.and()
-		//.authorizeRequests().antMatchers("/get").permitAll();
-		.httpBasic();
+		.formLogin().permitAll();
 		
-		
-		//temporary solution
-		//http.cors().and().csrf().disable();
 	}
 	
 }

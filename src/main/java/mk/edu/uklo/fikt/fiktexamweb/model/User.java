@@ -25,9 +25,20 @@ public class User {
 	private String username;
 	private String password;
 	private String role;
-	private String token;
 	
+	public User() {
+		
+	}
 	
+	public User(User user) {
+		user.id = user.getId();
+		user.brIndex = user.getBrIndex();
+		user.imePrezime = user.getImePrezime();
+		user.email = user.getEmail();
+		user.username = user.getUsername();
+		user.password = user.getPassword();
+		user.role = user.getRole();
+	}
 	
 	public String getEmail() {
 		return email;
@@ -72,14 +83,6 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public String getToken() {
-		return token;
-	}
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
-	
 	
 	
 }
