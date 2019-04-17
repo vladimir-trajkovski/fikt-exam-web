@@ -26,6 +26,9 @@ CREATE TABLE IF NOT EXISTS `quiz_db`.`user` (
   `password` VARCHAR(250) CHARACTER SET 'utf8' NOT NULL,
   `role` ENUM('Student', 'Profesor', 'Admin') NULL DEFAULT NULL,
   `token` VARCHAR(250) CHARACTER SET 'utf8' NOT NULL,
+  `email` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
+  `br_index` VARCHAR(9) CHARACTER SET 'utf8' NULL,
+  `ime_prezime` VARCHAR(50) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
