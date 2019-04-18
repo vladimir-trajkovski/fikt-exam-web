@@ -6,7 +6,10 @@ import mk.edu.uklo.fikt.fiktexamweb.model.Topic;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Long>{
+    List<Topic> findBySubjectId(long subjectId);
 
 }

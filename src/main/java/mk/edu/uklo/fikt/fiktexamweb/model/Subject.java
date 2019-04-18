@@ -1,10 +1,6 @@
 package mk.edu.uklo.fikt.fiktexamweb.model;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -19,6 +15,7 @@ public class Subject {
 
 	private String name;
 
+	@Column(name = "teacherId")
 	private Long teacherId;
 	
 	public Long getId() {

@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import mk.edu.uklo.fikt.fiktexamweb.util.CustomUserDetailsService;
@@ -38,20 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		
 	}
 	
-	
-	private PasswordEncoder getPasswordEncoder() {
-		return new PasswordEncoder() {
-			@Override
-			public String encode(CharSequence charSequence) {
-				return BCrypt.hashpw(charSequence.toString(), BCrypt.gensalt(4));
-			}
-
-			@Override
-			public boolean matches(CharSequence rawPassword, String encodedPassword) {
-				return BCrypt.checkpw(rawPassword.toString(), encodedPassword);
-			}
-			
-		};
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		return new BCryptPasswordEncoder(11);
 	}
 
 
@@ -59,13 +49,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception{
 		
 		http.csrf().disable();
-		http
-		.authorizeRequests()
-		.antMatchers("**/user**").authenticated()
-		.anyRequest().permitAll()
-		.and()
-		.formLogin().permitAll();
-		
-	}
+//		http
+//				.authorizeRequests()
+//				.antMatchers("/user/get/**").permitAll()
+//				.anyRequest().authenticated()
+//				.and().httpBasic();
+		}
 	
 }

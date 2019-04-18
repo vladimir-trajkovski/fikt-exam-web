@@ -29,13 +29,8 @@ public class OptionsBL {
 	}
 	
 	//get all options for 1 question
-	public List<Options> getOptionsForQuestion(String questionName){
-		Question question = questionBl.getByText(questionName);
-		
-		Options example = new Options();
-		example.setQuestionId(question.getId());
-		
-		return optionsRepository.findAll(Example.of(example));
+	public List<Options> getOptionsForQuestion(long questionId){
+		return optionsRepository.findByQuestionId(questionId);
 	}
 	
 }

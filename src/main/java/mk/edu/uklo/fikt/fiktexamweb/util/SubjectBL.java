@@ -18,6 +18,8 @@ public class SubjectBL {
 	
 	@Autowired
 	SubjectRepository subjectRepository;
+
+	@Autowired
 	UserBL userBl;
 	
 	//get all subjects
@@ -29,19 +31,19 @@ public class SubjectBL {
 	public Subject createSubject(@Valid Subject subject) {
 		return subjectRepository.save(subject);
 		}
-	
-	
+
+
 	//get all subjects for 1 professor
-	public List<Subject> getSubjectsByProfessor(String profUsername){
-		
-		User user = userBl.getByUsername(profUsername).get(0);
-		
-		Subject example = new Subject();
-		
-		example.setTeacherId(user.getId());
-		
-		return subjectRepository.findAll(Example.of(example));
-	}
+//	public List<Subject> getSubjectsByProfessor(String profUsername){
+//
+//		User user = userBl.getByUsername(profUsername).get(0);
+//
+//		Subject example = new Subject();
+//
+//		example.setTeacherId(user.getId());
+//
+//		return subjectRepository.findAll(Example.of(example));
+//	}
 	
 	//get by name
 	public List<Subject> getByName(String name){
@@ -50,6 +52,16 @@ public class SubjectBL {
 		example.setName(name);
 		
 		return subjectRepository.findAll(Example.of(example));
+	}
+
+	//get by name -- needs to be deleted
+	public List<Subject> getSubjectByName(long name){
+		return subjectRepository.findByTeacherId(name);
+	}
+
+	//get subject by id
+	public Subject getById(long id){
+		return subjectRepository.findById(id).get();
 	}
 	
 	

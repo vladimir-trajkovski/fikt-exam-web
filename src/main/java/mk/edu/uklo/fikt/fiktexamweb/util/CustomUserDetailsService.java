@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import mk.edu.uklo.fikt.fiktexamweb.model.CustomUserDetails;
 import mk.edu.uklo.fikt.fiktexamweb.model.User;
 
 @Service
@@ -22,8 +21,12 @@ public class CustomUserDetailsService implements UserDetailsService{
 		
 		Optional<User> optionalUsers = userRepository.findByUsername(username);
 		
-		return optionalUsers
-				.map(CustomUserDetails::new).get();
+		User user = optionalUsers.get();
+		return org.springframework.security.core.userdetails.User
+				.withUsername(user.getUsername())
+				.password(user.getPassword())
+				.authorities(user.getRole())
+				.build();
 	}
 	
 }

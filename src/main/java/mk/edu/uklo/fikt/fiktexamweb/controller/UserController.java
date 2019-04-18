@@ -1,6 +1,7 @@
 package mk.edu.uklo.fikt.fiktexamweb.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -20,15 +21,12 @@ public class UserController {
 	
 	@Autowired
 	UserBL userBl;
-	
+
+
+	//maybe won't be used
 	@GetMapping({"/get"})
 	public List<User> getAllUsers(){
 		return userBl.getAllUsers();
-	}
-	
-	@GetMapping({"/get/login"})
-	public List<User> getUsersByUsername(String username, String password){
-		return userBl.getUserByUsername(username, password);
 	}
 	
 	@PostMapping({"/post/teacher"})
@@ -41,4 +39,10 @@ public class UserController {
 		return userBl.createStudent(user);
 	}
 
+
+	//maybe needs to be deleted
+	@GetMapping("get/asd")
+	public Optional<User> getByUsername(String username){
+		return userBl.lista(username);
+	}
 }
