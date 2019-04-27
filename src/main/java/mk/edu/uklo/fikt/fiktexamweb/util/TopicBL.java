@@ -25,6 +25,11 @@ public class TopicBL {
 	public List<Topic> getTopics(){
 		return topicRepository.findAll();
 	}
+
+	//get topic by Id
+	public Topic getById(long id){
+		return topicRepository.findById(id).get();
+	}
 	
 	//add a new topic
 	public Topic addTopic(Topic topic) {
@@ -32,23 +37,9 @@ public class TopicBL {
 	}
 	
 	//get all topics for 1 subject
-	public List<Topic> getTopicsForSubject(String subjectName){
-		Subject subject = subjectBl.getByName(subjectName).get(0);
-		
-		Topic example = new Topic();
-		
-		example.setSubjectId(subject.getId());
-		
-		return topicRepository.findAll(Example.of(example));
-	}
-	
-	//get topic by name
-	public Topic getByName(String name) {
-		Topic example = new Topic();
-		
-		example.setName(name);
-		
-		return topicRepository.findAll(Example.of(example)).get(0);
+	public List<Topic> getTopicsForSubject(long subjectId){
+
+		return topicRepository.findBySubjectId(subjectId);
 	}
 	
 }

@@ -29,15 +29,9 @@ public class QuestionBL {
 	}
 	
 	//get all questions for 1 topic
-	public List<Question> getByTopic(String topicName){
+	public List<Question> getByTopic(long id){
 		
-		Topic topic = topicBl.getByName(topicName);
-		
-		Question example = new Question();
-		
-		example.setTopicId(topic.getId());
-		
-		return questionRepository.findAll(Example.of(example));
+		return questionRepository.findByTopicId(id);
 	}
 	
 	//get a question by text
@@ -48,13 +42,8 @@ public class QuestionBL {
 		return questionRepository.findAll(Example.of(example)).get(0);
 	}
 	
-	//get all questions for 1 subject NEEDS TO BE DONE
-	public List<Question> getBySubject(String subjectName){
-		
-		List<Topic> topics = topicBl.getTopicsForSubject(subjectName);
-		
-		return null;
-		
+	//get a question by id
+	public Question getById(long id){
+		return questionRepository.findById(id).get();
 	}
-
 }

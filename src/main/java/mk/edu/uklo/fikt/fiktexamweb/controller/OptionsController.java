@@ -27,11 +27,11 @@ public class OptionsController {
 		return optionsBl.getOptions();
 	}
 	
-	@GetMapping({"/get/byquestion"})
-	public List<Options> getByQuestion(String questionText){
-		return optionsBl.getOptionsForQuestion(questionText);
-	}
-	
+//	@GetMapping({"/get/byquestion"})
+//	public List<Options> getByQuestion(String questionText){
+//		return optionsBl.getOptionsForQuestion(questionText);
+//	}
+//
 	@PostMapping({"/post"})
 	public Options addOption(@Valid @RequestBody Options option) {
 		return optionsBl.addOption(option);

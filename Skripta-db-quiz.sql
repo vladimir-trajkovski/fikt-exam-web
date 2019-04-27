@@ -24,8 +24,7 @@ CREATE TABLE IF NOT EXISTS `quiz_db`.`user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(50) CHARACTER SET 'utf8' NOT NULL,
   `password` VARCHAR(250) CHARACTER SET 'utf8' NOT NULL,
-  `role` ENUM('Student', 'Profesor', 'Admin') NULL DEFAULT NULL,
-  `token` VARCHAR(250) CHARACTER SET 'utf8' NOT NULL,
+  `role` ENUM('Student', 'Teacher', 'Admin') NULL DEFAULT NULL,
   `email` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
   `br_index` VARCHAR(9) CHARACTER SET 'utf8' NULL,
   `ime_prezime` VARCHAR(50) CHARACTER SET 'utf8' NOT NULL,
@@ -80,11 +79,11 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `quiz_db`.`subject` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `teacherId` INT(11) NOT NULL,
+  `teacher_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_subject_user_idx` (`teacherId` ASC) VISIBLE,
+  INDEX `fk_subject_user_idx` (`teacher_id` ASC) VISIBLE,
   CONSTRAINT `fk_subject_user`
-    FOREIGN KEY (`teacherId`)
+    FOREIGN KEY (`teacher_id`)
     REFERENCES `quiz_db`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -99,11 +98,11 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `quiz_db`.`topic` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `subjectId` INT(11) NOT NULL,
+  `subject_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_topic_subject1_idx` (`subjectId` ASC) VISIBLE,
+  INDEX `fk_topic_subject1_idx` (`subject_id` ASC) VISIBLE,
   CONSTRAINT `fk_topic_subject1`
-    FOREIGN KEY (`subjectId`)
+    FOREIGN KEY (`subject_id`)
     REFERENCES `quiz_db`.`subject` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -119,11 +118,11 @@ CREATE TABLE IF NOT EXISTS `quiz_db`.`question` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(500) CHARACTER SET 'utf8' NOT NULL,
   `level` ENUM('1', '2', '3', '4', '5') NULL DEFAULT NULL,
-  `topicId` INT(11) NOT NULL,
+  `topic_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_question_topic1_idx` (`topicId` ASC) VISIBLE,
+  INDEX `fk_question_topic1_idx` (`topic_id` ASC) VISIBLE,
   CONSTRAINT `fk_question_topic1`
-    FOREIGN KEY (`topicId`)
+    FOREIGN KEY (`topic_id`)
     REFERENCES `quiz_db`.`topic` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -138,12 +137,12 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `quiz_db`.`options` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(200) CHARACTER SET 'utf8' NOT NULL,
-  `isTrue` TINYINT(1) NOT NULL,
-  `questionId` INT(11) NOT NULL,
+  `is_true` TINYINT(1) NOT NULL,
+  `question_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_options_question1_idx` (`questionId` ASC) VISIBLE,
+  INDEX `fk_options_question1_idx` (`question_id` ASC) VISIBLE,
   CONSTRAINT `fk_options_question1`
-    FOREIGN KEY (`questionId`)
+    FOREIGN KEY (`question_id`)
     REFERENCES `quiz_db`.`question` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -182,13 +181,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `quiz_db`.`combination` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `questionId` INT(11) NOT NULL,
+  `question_id` INT(11) NOT NULL,
   `testId` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_combination_question1_idx` (`questionId` ASC) VISIBLE,
+  INDEX `fk_combination_question1_idx` (`question_id` ASC) VISIBLE,
   INDEX `fk_combination_test1_idx` (`testId` ASC) VISIBLE,
   CONSTRAINT `fk_combination_question1`
-    FOREIGN KEY (`questionId`)
+    FOREIGN KEY (`question_id`)
     REFERENCES `quiz_db`.`question` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
