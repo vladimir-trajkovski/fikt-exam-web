@@ -6,21 +6,49 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import mk.edu.uklo.fikt.fiktexamweb.model.User;
 import mk.edu.uklo.fikt.fiktexamweb.util.UserBL;
 
-@RestController
+//@RestController
+@Controller
 @RequestMapping({"/user"})
+@SessionAttributes
 public class UserController {
 	
 	@Autowired
 	UserBL userBl;
+
+	//show createStudent.html
+	@GetMapping("/addstudent")
+	public String showForm(Model model){
+		User user = new User();
+		model.addAttribute("user", user);
+		return "createStudent";
+	}
+
+	//show createTeacher.html
+	@GetMapping("/addteacher")
+	public String showTeacherForm(Model model){
+		User user = new User();
+		model.addAttribute("user", user);
+		return "createTeacher";
+	}
+
+	//show adminui.html
+	@GetMapping("/adminform")
+	public String showAdminForm(){
+		return "adminui";
+	}
+
+	//show login form
+	@GetMapping("/login")
+	public String showLoginForm(){
+		return "login";
+	}
 
 
 	//maybe won't be used
@@ -30,14 +58,20 @@ public class UserController {
 	}
 	
 	@PostMapping({"/post/teacher"})
-	public User addTeacher(@Valid @RequestBody User user) {
-		return userBl.createTeacher(user);
+	public String addTeacher(@Valid @RequestBody @ModelAttribute(value = "user") User user, Model model) {
+		model.addAttribute("user", user);
+		userBl.createTeacher(user);
+		return "adminui";
 	}
-	
+
 	@PostMapping({"/post/student"})
-	public User addStudent(@Valid @RequestBody User user) {
-		return userBl.createStudent(user);
+	public String addStudent(@Valid @RequestBody @ModelAttribute(value = "user") User user, Model model) {
+		model.addAttribute("user", user);
+		userBl.createStudent(user);
+		return "adminui";
 	}
+
+
 
 
 	//maybe needs to be deleted
