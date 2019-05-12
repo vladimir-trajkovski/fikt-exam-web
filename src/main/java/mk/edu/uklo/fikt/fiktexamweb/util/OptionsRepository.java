@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 @Repository
-public interface OptionsRepository extends JpaRepository<Options, Long>{
+public interface OptionsRepository extends JpaRepository<Options, Integer>{
     List<Options> findByQuestionId(long questionId);
 }

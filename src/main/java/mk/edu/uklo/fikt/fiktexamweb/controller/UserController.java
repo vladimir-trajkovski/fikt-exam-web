@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import mk.edu.uklo.fikt.fiktexamweb.model.User;
-import mk.edu.uklo.fikt.fiktexamweb.util.UserBL;
+import mk.edu.uklo.fikt.fiktexamweb.util.UserService;
 
 //@RestController
 @Controller
@@ -20,7 +20,7 @@ import mk.edu.uklo.fikt.fiktexamweb.util.UserBL;
 public class UserController {
 	
 	@Autowired
-	UserBL userBl;
+    UserService userService;
 
 	//show createStudent.html
 	@GetMapping("/addstudent")
@@ -54,20 +54,20 @@ public class UserController {
 	//maybe won't be used
 	@GetMapping({"/get"})
 	public List<User> getAllUsers(){
-		return userBl.getAllUsers();
+		return userService.getAllUsers();
 	}
 	
 	@PostMapping({"/post/teacher"})
 	public String addTeacher(@Valid @RequestBody @ModelAttribute(value = "user") User user, Model model) {
 		model.addAttribute("user", user);
-		userBl.createTeacher(user);
+		userService.createTeacher(user);
 		return "adminui";
 	}
 
 	@PostMapping({"/post/student"})
 	public String addStudent(@Valid @RequestBody @ModelAttribute(value = "user") User user, Model model) {
 		model.addAttribute("user", user);
-		userBl.createStudent(user);
+		userService.createStudent(user);
 		return "adminui";
 	}
 
@@ -77,6 +77,6 @@ public class UserController {
 	//maybe needs to be deleted
 	@GetMapping("get/asd")
 	public Optional<User> getByUsername(String username){
-		return userBl.lista(username);
+		return userService.lista(username);
 	}
 }
