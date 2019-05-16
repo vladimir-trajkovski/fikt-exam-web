@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+<div action="#" th:action="@{/topic/get/topics/1}" th:object="${topics}" method="get">
+<form>
+    <div th:each="topic : ${topics}">
+    <input type="button" th:value="${topic.name}">
+    </div>
+    <input type="button" value="add topic">
+</form>
+</div>
+</body>
+</html>

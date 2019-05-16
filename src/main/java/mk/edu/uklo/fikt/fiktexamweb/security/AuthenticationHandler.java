@@ -1,5 +1,7 @@
 package mk.edu.uklo.fikt.fiktexamweb.security;
 
+import mk.edu.uklo.fikt.fiktexamweb.util.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -15,6 +17,10 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class AuthenticationHandler implements AuthenticationSuccessHandler {
+
+    @Autowired
+    UserService userService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         handle(httpServletRequest, httpServletResponse, authentication);
@@ -42,12 +48,14 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler {
             }
         }
 
+        long userId = userService.getIdByUsername(authentication.getName());
+
         if (isStudent) {
-            return "/homepage.html";
+            return "/subject/studentsubjectscreen/";
         } else if (isAdmin) {
             return "/user/adminform";
         } else if (isTeacher) {
-            return "/homepage.html";
+            return "/subject/subjectscreen/" + userId;
         }else {
             throw new IllegalStateException();
         }

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+<div action="#" th:action="@{/get}" th:object="${subjects}" method="get">
+<form>
+    <div th:each="subject : ${subjects}">
+    <input type="button" th:value="${subject.name}">
+    </div>
+</form>
+</div>
+</body>
+</html>

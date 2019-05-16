@@ -3,6 +3,8 @@ package mk.edu.uklo.fikt.fiktexamweb.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import mk.edu.uklo.fikt.fiktexamweb.DTO.QuestionAnswers;
+import mk.edu.uklo.fikt.fiktexamweb.model.Options;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class QuestionService {
 	private TopicService topicService;
 
 	@Autowired
+	private OptionsRepository optionsRepository;
+
+	@Autowired
 	private TestService testService;
 	
 	//get all questions
@@ -33,7 +38,6 @@ public class QuestionService {
 	
 	//get all questions for 1 topic
 	public List<Question> getByTopic(long id){
-		
 		return questionRepository.findByTopicId(id);
 	}
 	
@@ -58,5 +62,20 @@ public class QuestionService {
 		return lista;
 	}
 
+	public QuestionAnswers addQuestionAndOptions(QuestionAnswers questionAnswers){
+		Question question = new Question();
+		question.setText(questionAnswers.getQuestionText());
+		question.setTopicId(questionAnswers.getTopic().getId());
+		question.setLevel(questionAnswers.getLevel());
+		int questionId = questionRepository.save(question).getId();
+		int answersSize = questionAnswers.getOptions().size();
+		List<Options> options = questionAnswers.getOptions();
+		for (int i = 0; i<answersSize; i++){
+			options.get(i).setQuestionId((long) questionId);
+			optionsRepository.save(options.get(i));
+		}
+
+		return questionAnswers;
+	}
 
 }

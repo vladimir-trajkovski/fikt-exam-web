@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+<script type="text/javascript">
+var counter = 0;
+  function onBtnClick()
+  {
+    var forma = document.createElement('form');
+    var input = document.createElement('input');
+    input.type='text';
+    var radio = document.createElement('input');
+    radio.type='radio';
+    var kopce = document.createElement('input');
+    kopce.type='button';
+    kopce.value='-';
+    forma.appendChild(input);
+    forma.appendChild(radio);
+    forma.appendChild(kopce);
+    var div1 = document.getElementById('mojdiv');
+    forma.id="forma " + counter;
+    div1.appendChild(forma);
+    kopce.onclick(deleteForm(forma.id));
+    counter+=1;
+  };
+  function deleteForm(id){
+    document.getElementById(id).deleteForm();
+  }
+</script>
+<form action="#" th:action="@{/question/addquestion}" th:object="${questionAnswers}">
+  <input type="text" th:field="*{questionText}" class="form-control">
+<br>
+<select>
+  <div th:each="topic : ${topics}">
+  <option th:text="${topic.name}"></option>
+  </div>
+</select>
+<br>
+<select>
+  <option value="volvo">1</option>
+  <option value="volvo">2</option>
+  <option value="volvo">3</option>
+  <option value="volvo">4</option>
+  <option value="volvo">5</option>
+</select>
+<br>
+<div id="mojdiv">
+<form id="asddsa">
+  <input type="text" name="LastName">
+<input type="radio" value="Is true">
+<input type="button" value="-">
+</form>
+</div>
+<br>
+<button id="probuvam" onclick="javascript:onBtnClick();">Add answer</button>
+<br>
+<button>Submit</button>
+</form>
+</body>
+</html>

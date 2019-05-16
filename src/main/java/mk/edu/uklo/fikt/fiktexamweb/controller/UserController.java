@@ -50,13 +50,7 @@ public class UserController {
 		return "login";
 	}
 
-
-	//maybe won't be used
-	@GetMapping({"/get"})
-	public List<User> getAllUsers(){
-		return userService.getAllUsers();
-	}
-	
+	//create a teacher
 	@PostMapping({"/post/teacher"})
 	public String addTeacher(@Valid @RequestBody @ModelAttribute(value = "user") User user, Model model) {
 		model.addAttribute("user", user);
@@ -64,19 +58,11 @@ public class UserController {
 		return "adminui";
 	}
 
+	//create a student
 	@PostMapping({"/post/student"})
 	public String addStudent(@Valid @RequestBody @ModelAttribute(value = "user") User user, Model model) {
 		model.addAttribute("user", user);
 		userService.createStudent(user);
 		return "adminui";
-	}
-
-
-
-
-	//maybe needs to be deleted
-	@GetMapping("get/asd")
-	public Optional<User> getByUsername(String username){
-		return userService.lista(username);
 	}
 }

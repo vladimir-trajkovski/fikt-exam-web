@@ -15,11 +15,6 @@ public class TopicService {
 	@Autowired
 	TopicRepository topicRepository;
 	SubjectService subjectService;
-	
-	//get all topics
-	public List<Topic> getTopics(){
-		return topicRepository.findAll();
-	}
 
 	//get topic by Id
 	public Topic getById(long id){
@@ -32,9 +27,8 @@ public class TopicService {
 	}
 	
 	//get all topics for 1 subject
-	public List<Topic> getTopicsForSubject(long subjectId){
-
+	public List<Topic> getTopicsForSubject(int subjectId){
 		return topicRepository.findBySubjectId(subjectId);
 	}
-	
+
 }

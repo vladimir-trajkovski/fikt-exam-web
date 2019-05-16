@@ -31,36 +31,14 @@ public class SubjectService {
 		}
 
 
-	//get all subjects for 1 professor
-//	public List<Subject> getSubjectsByProfessor(String profUsername){
-//
-//		User user = userService.getByUsername(profUsername).get(0);
-//
-//		Subject example = new Subject();
-//
-//		example.setTeacherId(user.getId());
-//
-//		return subjectRepository.findAll(Example.of(example));
-//	}
-	
-	//get by name
-	public List<Subject> getByName(String name){
-		Subject example = new Subject();
-		
-		example.setName(name);
-		
-		return subjectRepository.findAll(Example.of(example));
+	public List<Subject> getByTeacher(int teacherId){
+		return subjectRepository.findByTeacherId(teacherId);
 	}
 
-	//get by name -- needs to be deleted
-	public List<Subject> getSubjectByName(long name){
-		return subjectRepository.findByTeacherId(name);
-	}
 
 	//get subject by id
 	public Subject getById(long id){
 		return subjectRepository.findById(id).get();
 	}
-	
-	
+
 }

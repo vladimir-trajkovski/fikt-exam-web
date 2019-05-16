@@ -1,7 +1,6 @@
 package mk.edu.uklo.fikt.fiktexamweb.util;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,8 +17,8 @@ public class UserService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	public Optional<User> lista(String username){
-		return userRepository.findByUsername(username);
+	public Long getIdByUsername(String username){
+		return userRepository.findByUsername(username).get().getId();
 	}
 	
 	//Get all Users
@@ -42,5 +41,7 @@ public class UserService {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}
-	
+
+
+	//get user by username
 }
