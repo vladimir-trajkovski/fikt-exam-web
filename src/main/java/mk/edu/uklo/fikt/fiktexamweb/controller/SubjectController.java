@@ -1,14 +1,21 @@
 package mk.edu.uklo.fikt.fiktexamweb.controller;
 
+import java.security.Principal;
 import java.util.List;
 
-import javax.jws.WebParam;
+import javax.jws.soap.SOAPBinding;
 import javax.validation.Valid;
 
 import mk.edu.uklo.fikt.fiktexamweb.DTO.SubjectTopics;
+import mk.edu.uklo.fikt.fiktexamweb.DTO.TeacherSubjects;
 import mk.edu.uklo.fikt.fiktexamweb.model.Topic;
+import mk.edu.uklo.fikt.fiktexamweb.model.User;
 import mk.edu.uklo.fikt.fiktexamweb.util.TopicService;
+import mk.edu.uklo.fikt.fiktexamweb.util.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,18 +25,26 @@ import mk.edu.uklo.fikt.fiktexamweb.util.SubjectService;
 
 @Controller
 @RequestMapping({"/subject"})
+@SessionAttributes
 public class SubjectController {
 	
 	@Autowired
-	SubjectService subjectService;
+	private SubjectService subjectService;
 
 	@Autowired
-	TopicService topicService;
+	private TopicService topicService;
+
+	@Autowired
+	private UserService userService;
 
 	//go to P2 screen which contains all subjects for authencicated teacher
-	@GetMapping("/subjectscreen/{id}")
-	public String getSubjects(@PathVariable int id, Model model){
-		getByTeacher(id, model);
+	@GetMapping("/subjectscreen")
+	public String getSubjects(Model model){
+		getByTeacher(userService.getIdByUsername(
+				SecurityContextHolder.getContext().getAuthentication().getName()),
+				model);
+		Subject subject = new Subject();
+		model.addAttribute("subject", subject);
 		return "P2";
 	}
 
@@ -49,11 +64,11 @@ public class SubjectController {
 	}
 
 	//get all subjects for 1 teacher
-	@GetMapping({"/get/byteacher/{id}"})
-	public List<Subject> getByTeacher(@PathVariable int teacherId, Model model){
-		List<Subject> subjects = subjectService.getByTeacher(teacherId);
-		model.addAttribute("subjects", subjects);
-		return subjects;
+	@GetMapping({"/get/byteacher"})
+	public TeacherSubjects getByTeacher(int teacherId, Model model){
+		TeacherSubjects teacherSubjects = subjectService.getByTeacher(teacherId);
+		model.addAttribute("teacherSubjects", teacherSubjects);
+		return teacherSubjects;
 	}
 
 	//TODO -- add a new subject
@@ -65,9 +80,9 @@ public class SubjectController {
 
 	//Get subject and his topics
 	@GetMapping("/get/subjecttopics/{id}")
-	public SubjectTopics getSubjectAndTopics(@PathVariable(name = "id") long id){
+	public SubjectTopics getSubjectAndTopics(@PathVariable(name = "id") int id){
 		Subject subject = subjectService.getById(id);
-		List<Topic> topics = topicService.getTopicsForSubject((int) id);
+		List<Topic> topics = topicService.getTopicsForOneSubject((int) id);
 		SubjectTopics subjectTopics = new SubjectTopics();
 		subjectTopics.setSubjectName(subject.getName());
 		subjectTopics.setTopics(topics);

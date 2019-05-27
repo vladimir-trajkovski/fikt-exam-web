@@ -18,7 +18,7 @@ public class Question {
 	
 	private String text;
 	private String level;
-	private Long topicId;
+	private int topicId;
 
 
 	public int getId() {
@@ -41,10 +41,10 @@ public class Question {
 	public void setLevel(String level) {
 		this.level = level;
 	}
-	public Long getTopicId() {
+	public int getTopicId() {
 		return topicId;
 	}
-	public void setTopicId(Long topicId) {
+	public void setTopicId(int topicId) {
 		this.topicId = topicId;
 	}
 	

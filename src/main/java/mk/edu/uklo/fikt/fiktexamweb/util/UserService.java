@@ -17,7 +17,7 @@ public class UserService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	public Long getIdByUsername(String username){
+	public int getIdByUsername(String username){
 		return userRepository.findByUsername(username).get().getId();
 	}
 	
@@ -44,4 +44,7 @@ public class UserService {
 
 
 	//get user by username
+	public User getByUsername(String username){
+		return userRepository.findByUsername(username).get();
+	}
 }

@@ -18,7 +18,7 @@ public class Options {
 	
 	private String text;
 	private boolean isTrue;
-	private Long questionId;
+	private int questionId;
 	
 	
 	public Long getId() {
@@ -33,16 +33,19 @@ public class Options {
 	public void setText(String text) {
 		this.text = text;
 	}
+
 	public boolean isTrue() {
 		return isTrue;
 	}
-	public void setTrue(boolean isTrue) {
-		this.isTrue = isTrue;
+
+	public void setTrue(boolean aTrue) {
+		isTrue = aTrue;
 	}
-	public Long getQuestionId() {
+
+	public int getQuestionId() {
 		return questionId;
 	}
-	public void setQuestionId(Long questionId) {
+	public void setQuestionId(int questionId) {
 		this.questionId = questionId;
 	}
 	

@@ -19,7 +19,7 @@ import java.util.Collection;
 public class AuthenticationHandler implements AuthenticationSuccessHandler {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
@@ -48,14 +48,14 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler {
             }
         }
 
-        long userId = userService.getIdByUsername(authentication.getName());
+        int userId = userService.getIdByUsername(authentication.getName());
 
         if (isStudent) {
             return "/subject/studentsubjectscreen/";
         } else if (isAdmin) {
             return "/user/adminform";
         } else if (isTeacher) {
-            return "/subject/subjectscreen/" + userId;
+            return "/subject/subjectscreen";
         }else {
             throw new IllegalStateException();
         }

@@ -10,18 +10,18 @@ public class Topic {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 	
 	private String name;
 
 	@Column(name = "subjectId")
-	private Long subjectId;
+	private int subjectId;
 	
 	
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -30,10 +30,10 @@ public class Topic {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Long getSubjectId() {
+	public int getSubjectId() {
 		return subjectId;
 	}
-	public void setSubjectId(Long subjectId) {
+	public void setSubjectId(int subjectId) {
 		this.subjectId = subjectId;
 	}
 	

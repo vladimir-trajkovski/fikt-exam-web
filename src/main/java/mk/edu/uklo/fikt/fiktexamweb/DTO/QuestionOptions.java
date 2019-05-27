@@ -6,8 +6,18 @@ import java.util.List;
 
 public class QuestionOptions {
 
+    private int id;
+
     private String questionText;
     private List<Options> options;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getQuestionText(){
         return this.questionText;

@@ -4,17 +4,16 @@ import java.util.List;
 
 import mk.edu.uklo.fikt.fiktexamweb.DTO.QuestionAnswers;
 import mk.edu.uklo.fikt.fiktexamweb.DTO.QuestionOptions;
-import mk.edu.uklo.fikt.fiktexamweb.model.Answer;
-import mk.edu.uklo.fikt.fiktexamweb.model.Topic;
+import mk.edu.uklo.fikt.fiktexamweb.DTO.TopicQuestions;
+import mk.edu.uklo.fikt.fiktexamweb.model.*;
 import mk.edu.uklo.fikt.fiktexamweb.util.OptionsService;
 import mk.edu.uklo.fikt.fiktexamweb.util.QuestionService;
+import mk.edu.uklo.fikt.fiktexamweb.util.SubjectService;
 import mk.edu.uklo.fikt.fiktexamweb.util.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import mk.edu.uklo.fikt.fiktexamweb.model.Question;
 
 import javax.jws.WebParam;
 import javax.validation.Valid;
@@ -33,19 +32,25 @@ public class QuestionController {
 	@Autowired
 	TopicService topicService;
 
+	@Autowired
+	SubjectService subjectService;
+
 	//go to the Screen with questions for 1 topic
-	@GetMapping("/question/{id}")
-	public String getAddQuestionForm(@PathVariable int id, Model model){
-		getQuestionsForTopic(id, model);
+	@PostMapping("/question")
+	public String getAddQuestionForm(Topic topic, Model model){
+		model.addAttribute("topic", topic);
+		getQuestionsForTopic(topic.getId(), model);
+		Question question = new Question();
+		model.addAttribute("question", question);
 		return "P4";
 	}
 
 	//get all questions for 1 topic
-	@GetMapping("/get/question/{id}")
-	public List<Question> getQuestionsForTopic(@PathVariable int id, Model model){
-		List<Question> questions = questionService.getByTopic(id);
-		model.addAttribute("questions", questions);
-		return questions;
+	@GetMapping("/get/question")
+	public TopicQuestions getQuestionsForTopic(int id, Model model){
+		TopicQuestions topicQuestions = questionService.getByTopic(id);
+		model.addAttribute("topicQuestions", topicQuestions);
+		return topicQuestions;
 	}
 
 	//TODO -- needs to be retested -- go to screen with questions for testing
@@ -56,11 +61,17 @@ public class QuestionController {
 	}
 
 	//go to screen for adding questions
-	@GetMapping("/addquestionform/{id}")
-	public String getQuestionAddForm(Model model, @PathVariable(name = "id") int id){
-		List<Topic> topics = topicService.getTopicsForSubject(id);
+	@PostMapping("/addquestionform")
+	public String getQuestionAddForm(Topic topic, Model model){
+		model.addAttribute("topic", topic);
+		Topic newTopic = topicService.getById(topic.getId());
+		Subject subject = subjectService.getById(newTopic.getSubjectId());
+		model.addAttribute("newtopic", newTopic);
+		List<Topic> topics = topicService.getTopicsForOneSubject(subject.getId());
 		model.addAttribute("topics" ,topics);
 		QuestionAnswers questionAnswers = new QuestionAnswers();
+		List<Options> options = optionsService.getOptionsForQuestion(1);
+		questionAnswers.setOptions(options);
 		model.addAttribute("questionAnswers", questionAnswers);
 		return "addQuestionScreen";
 	}
@@ -73,7 +84,7 @@ public class QuestionController {
 
 	//TODO -- needs to be retested to check if will be used
 	@GetMapping("/get/questionoptions/{id}")
-	public QuestionOptions getQuestionOptions(@PathVariable(name = "id") long id, Model model){
+	public QuestionOptions getQuestionOptions(@PathVariable(name = "id") int id, Model model){
 		QuestionOptions questionOptions = new QuestionOptions();
 		id=15;
 		questionOptions.setQuestionText(questionService.getById(id).getText());
@@ -87,10 +98,10 @@ public class QuestionController {
 	public String addQuestionAndOptions(
 			@RequestBody @Valid @ModelAttribute(value = "questionAnswers") QuestionAnswers questionAnswers,
 			Model model){
-		List<Topic> topics = topicService.getTopicsForSubject(3);
+		List<Topic> topics = topicService.getTopicsForOneSubject(3);
 		model.addAttribute("topics", topics);
 		model.addAttribute("questionAnswers", questionAnswers);
 		questionService.addQuestionAndOptions(questionAnswers);
-		return "addQuestionScreen";
+		return "P4";
 	}
 }

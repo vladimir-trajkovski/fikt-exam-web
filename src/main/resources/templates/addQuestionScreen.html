@@ -1,64 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 </head>
 <body>
 <script type="text/javascript">
 var counter = 0;
   function onBtnClick()
   {
-    var forma = document.createElement('form');
+    var div = document.createElement('div');
     var input = document.createElement('input');
+    var divEach = document.getElementById('diveach');
+    div.name='opcii';
     input.type='text';
-    var radio = document.createElement('input');
-    radio.type='radio';
+    input.name='LastName';
+    input.setAttribute("th:field", "*{options[2].text}");
+
+    // var radio = document.createElement('input');
+    // radio.type='radio';
+    // radio.name='radio';
     var kopce = document.createElement('input');
     kopce.type='button';
     kopce.value='-';
-    forma.appendChild(input);
-    forma.appendChild(radio);
-    forma.appendChild(kopce);
-    var div1 = document.getElementById('mojdiv');
-    forma.id="forma " + counter;
-    div1.appendChild(forma);
-    kopce.onclick(deleteForm(forma.id));
+    div.appendChild(input);
+    // div.appendChild(radio);
+    div.appendChild(kopce);
+    divEach.appendChild(div);
+    // kopce.onclick(deleteForm(div.id));
     counter+=1;
+
   };
   function deleteForm(id){
     document.getElementById(id).deleteForm();
   }
+
+
+
+
 </script>
-<form action="#" th:action="@{/question/addquestion}" th:object="${questionAnswers}">
-  <input type="text" th:field="*{questionText}" class="form-control">
-<br>
-<select>
-  <div th:each="topic : ${topics}">
-  <option th:text="${topic.name}"></option>
-  </div>
-</select>
-<br>
-<select>
-  <option value="volvo">1</option>
-  <option value="volvo">2</option>
-  <option value="volvo">3</option>
-  <option value="volvo">4</option>
-  <option value="volvo">5</option>
-</select>
-<br>
-<div id="mojdiv">
-<form id="asddsa">
-  <input type="text" name="LastName">
-<input type="radio" value="Is true">
-<input type="button" value="-">
-</form>
-</div>
-<br>
-<button id="probuvam" onclick="javascript:onBtnClick();">Add answer</button>
-<br>
-<button>Submit</button>
+<form action="#" th:action="@{/question/addquestion}" th:object="${questionAnswers}" method="post">
+    <input type="text" th:field="*{questionText}" class="form-control">
+    <p> -- question text</p>
+    <br>
+    <select th:field="*{topic.id}">
+        <div th:each="topica : ${topics}">
+            <span th:if="${newtopic.name == topica.name}"><option th:text="${topica.name}" th:value="${topica.id}"
+                                                                  selected></option></span>
+            <span th:unless="${newtopic.name == topica.name}"><option th:text="${topica.name}"
+                                                                      th:value="${topica.id}"></option></span>
+        </div>
+    </select>
+    <p> topic </p>
+    <br>
+    <select th:field="*{level}">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <p> level </p>
+    <br>
+    <div id="diveach" th:each="option, i : opcii">
+        <div id="mojdiv" name="opcii">
+            <input type="text" name="LastName" th:field="*{options[__${i.index}__].text}">
+<!--            <input type="radio" name="radio" th:field="*{options[__${i.index}__].isTrue}">-->
+            <input type="button" value="-">
+        </div>
+    </div>
+    <br>
+    <input type="button" onclick="javascript:onBtnClick();" value="Add Answer">
+    <br>
+    <input type="submit">
 </form>
 </body>
 </html>

@@ -6,8 +6,18 @@ import java.util.List;
 
 public class TopicQuestions {
 
+    private int id;
+
     private String topicName;
     private List<Question> questions;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTopicName(){
         return this.topicName;

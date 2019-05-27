@@ -4,13 +4,16 @@
 
 </head>
 <body>
-<div action="#" th:action="@{/question/get/question/1}" th:object="${questions}" method="get">
+<p th:text="${topicQuestions.topicName}"></p>
 <form>
-    <div th:each="question : ${questions}">
-    <input type="button" th:value="${question.text}">
+    <p th:text="${topicQuestions.id}">
+    <div th:each="questiona : ${topicQuestions.questions}">
+        <input type="button" th:value="${questiona.text}">
     </div>
-    <input type="button" value="add question">
 </form>
-</div>
+<form action="#" th:action="@{/question/addquestionform}" th:object="${topic}" method="post">
+    <input type="hidden" th:value="${topicQuestions.id}" th:id="id" th:name="id">
+    <input type="submit" value="add question">
+</form>
 </body>
 </html>

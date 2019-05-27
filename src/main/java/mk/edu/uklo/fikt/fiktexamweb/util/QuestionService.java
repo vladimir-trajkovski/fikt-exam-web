@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mk.edu.uklo.fikt.fiktexamweb.DTO.QuestionAnswers;
+import mk.edu.uklo.fikt.fiktexamweb.DTO.TopicQuestions;
 import mk.edu.uklo.fikt.fiktexamweb.model.Options;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -37,14 +38,17 @@ public class QuestionService {
 	}
 	
 	//get all questions for 1 topic
-	public List<Question> getByTopic(long id){
-		return questionRepository.findByTopicId(id);
+	public TopicQuestions getByTopic(int id){
+		TopicQuestions topicQuestions = new TopicQuestions();
+		topicQuestions.setId(id);
+		topicQuestions.setTopicName(topicService.topicRepository.findById(id).get().getName());
+		topicQuestions.setQuestions(questionRepository.findByTopicId(id));
+		return topicQuestions;
 	}
 	
 	//get a question by text
 	public Question getByText(String text) {
 		Question example = new Question();
-		
 		example.setText(text);
 		return questionRepository.findAll(Example.of(example)).get(0);
 	}
@@ -71,9 +75,10 @@ public class QuestionService {
 		int answersSize = questionAnswers.getOptions().size();
 		List<Options> options = questionAnswers.getOptions();
 		for (int i = 0; i<answersSize; i++){
-			options.get(i).setQuestionId((long) questionId);
-			optionsRepository.save(options.get(i));
+			options.get(i).setQuestionId(questionId);
+			options.get(i).setTrue(false);
 		}
+		optionsRepository.saveAll(options);
 
 		return questionAnswers;
 	}
