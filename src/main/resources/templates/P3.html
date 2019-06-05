@@ -1,16 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body>
-<p th:text="${subjectTopics.subjectName}"></p>
-<div th:each="topica : ${subjectTopics.topics}">
-<form action="#" th:action="@{/question/question}" th:object="${topic}" method="post">
-    <input type="text" th:value="${topica.id}" th:id="id" th:name="id">
-    <input type="submit" th:value="${topica.name}">
-</form>
+<body style="background-color: #d2dde8">
+<script type="text/javascript">
+    function showForm()
+    {
+    var forma = document.getElementById('forma');
+    forma.type='text';
+    var button = document.getElementById('button1');
+    button.disabled=true;
+    var button2 = document.getElementById('button2');
+    button2.type = 'submit';
+    }
+
+
+
+</script>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/subject/subject-screen">Subjects</a></li>
+        <li class="breadcrumb-item">Topics</li>
+    </ol>
+</nav>
+<div class="jumbotron text-center">
+    <div class="page-header">
+        <h1 th:text="${subjectTopics.subjectName}"></h1>
+    </div>
 </div>
-<input type="button" value="add topic">
+
+
+<div class="mx-auto" style="border: 1cm tan solid; border-radius: 5mm; width: 80%">
+    <br><br>
+    <div class="container">
+        <div th:each="topica : ${subjectTopics.topics}">
+            <div class="col-xs-3">
+                <form action="#" th:action="@{/question/question}" th:object="${topic}" method="post">
+                    <input type="hidden" th:value="${topica.id}" th:name="id" th:id="id">
+                    <input class="btn btn-secondary btn-large btn-block" type="submit" th:value="${topica.name}">
+                    <br><br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+<form action="#" th:action="@{/topic/post}" th:object="${topic}" method="post">
+    <div class="container">
+        <input type="hidden" th:value="${subjectTopics.id}" th:name="subjectId" th:id="subjectId">
+        <input id="forma" type="hidden" class="form-control" th:field="*{name}">
+    </div>
+    <br><br>
+    <div class="col-md-2 ml-md-auto">
+        <input id="button1" class="btn btn-info btn-lg" onclick="javascript:showForm();" type="button" value="ADD TOPIC">
+    </div>
+    <br>
+    <div class="col-md-2 ml-md-auto">
+        <input id="button2" class="btn btn-info btn-lg" type="hidden" value="SAVE">
+    </div>
+</form>
+<br><br>
+<form action="#" th:action="@{/test/post}" th:object="${subject}" method="post">
+    <div class="col-md-2 ml-md-auto">
+        <input type="hidden" th:value="${subjectTopics.subjectName}" th:id="name" th:name="name">
+        <input class="btn btn-info btn-lg" type="submit" value="CREATE TEST">
+    </div>
+</form>
 </body>
 </html>

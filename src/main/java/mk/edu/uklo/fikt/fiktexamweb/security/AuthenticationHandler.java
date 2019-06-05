@@ -51,11 +51,11 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler {
         int userId = userService.getIdByUsername(authentication.getName());
 
         if (isStudent) {
-            return "/subject/studentsubjectscreen/";
+            return "/subject/student-subject-screen/";
         } else if (isAdmin) {
             return "/user/adminform";
         } else if (isTeacher) {
-            return "/subject/subjectscreen";
+            return "/subject/subject-screen";
         }else {
             throw new IllegalStateException();
         }

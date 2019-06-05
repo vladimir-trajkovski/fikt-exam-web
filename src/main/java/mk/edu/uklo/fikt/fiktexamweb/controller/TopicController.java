@@ -1,14 +1,9 @@
 package mk.edu.uklo.fikt.fiktexamweb.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import mk.edu.uklo.fikt.fiktexamweb.DTO.SubjectTopics;
-import mk.edu.uklo.fikt.fiktexamweb.DTO.TopicQuestions;
 import mk.edu.uklo.fikt.fiktexamweb.model.Subject;
-import mk.edu.uklo.fikt.fiktexamweb.util.QuestionService;
 import mk.edu.uklo.fikt.fiktexamweb.util.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,9 +22,6 @@ public class TopicController {
 	TopicService topicService;
 
 	@Autowired
-	QuestionService questionService;
-
-	@Autowired
 	SubjectService subjectService;
 
 	@PostMapping("/get/topicsforsubject")
@@ -41,13 +33,6 @@ public class TopicController {
 		return "P3";
 	}
 
-	//get screen with topics for selected subject
-	@GetMapping("/topic/{id}")
-	public String topicScreen(@PathVariable int id, Model model){
-		getTopicsForSubject(id, model);
-		return "P3";
-	}
-
 	//get topics for selected subject
 	@GetMapping("/get/topics")
 	public SubjectTopics getTopicsForSubject(int id, Model model){
@@ -56,18 +41,12 @@ public class TopicController {
 		return subjectTopics;
 	}
 
-	//TODO -- add a new topic
+	//add a new topic
 	@PostMapping({"/post"})
-	public Topic addTopic(@Valid @RequestBody Topic topic) {
-		return topicService.addTopic(topic);
-	}
-
-	//get topic and all his questions
-	@GetMapping("/get/topicquestins/{id}")
-	public TopicQuestions getTopicAndQuestions(@PathVariable(name = "id") int id){
-		TopicQuestions topicQuestions = new TopicQuestions();
-		topicQuestions.setTopicName(topicService.getById(id).getName());
-		topicQuestions.setQuestions(questionService.getByTopic(id).getQuestions());
-		return topicQuestions;
+	public String addTopic(@Valid Topic topic, Model model) {
+		model.addAttribute("topic", topic);
+		topic.setId(0);
+		topicService.addTopic(topic);
+		return getTopicsForSubjectPost(subjectService.getById(topic.getSubjectId()), model);
 	}
 }

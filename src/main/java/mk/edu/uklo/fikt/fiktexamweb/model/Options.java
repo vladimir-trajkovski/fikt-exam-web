@@ -14,17 +14,17 @@ public class Options {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 	
 	private String text;
 	private boolean isTrue;
 	private int questionId;
 	
 	
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getText() {
@@ -34,12 +34,12 @@ public class Options {
 		this.text = text;
 	}
 
-	public boolean isTrue() {
+	public boolean getIsTrue() {
 		return isTrue;
 	}
 
-	public void setTrue(boolean aTrue) {
-		isTrue = aTrue;
+	public void setIsTrue(boolean isTrue) {
+		this.isTrue = isTrue;
 	}
 
 	public int getQuestionId() {

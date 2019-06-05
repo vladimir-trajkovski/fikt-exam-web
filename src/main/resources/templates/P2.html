@@ -1,16 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body>
-<p th:text="${teacherSubjects.teacherName}"></p>
-<div th:each="subjecta : ${teacherSubjects.subjectList}">
-<form action="#" th:action="@{/topic/get/topicsforsubject}" th:object="${subject}" method="post">
-        <input type="hidden" th:value="${subjecta.id}" th:name="id" th:id="id">
-    <input type="submit" th:value="${subjecta.name}">
+<body style="background-color: #d2dde8">
+<script type="text/javascript">
+    function showForm()
+    {
+    var forma = document.getElementById('forma');
+    forma.type='text';
+    var button = document.getElementById('button1');
+    button.disabled=true;
+    var button2 = document.getElementById('button2');
+    button2.type = 'submit';
+    }
+
+
+</script>
+<form action="#" th:action="@{/logout}" method="post">
+    <input style="position: absolute; left:93%;" class="btn btn-danger" type="submit" value="logout">
 </form>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/subject/subject-screen">Subjects</a></li>
+    </ol>
+</nav>
+<div class="jumbotron text-center">
+    <div class="page-header">
+        <h1 th:text="${teacherSubjects.teacherName}"></h1>
+    </div>
 </div>
-<input type="button" value="add subject">
+<div class="mx-auto" style="border: 1cm tan solid; border-radius: 5mm; width: 80%">
+    <br><br>
+    <div id="mydiv" class="container">
+
+        <div th:each="subjecta : ${teacherSubjects.subjectList}">
+            <div class="col-xs-3">
+                <form action="#" th:action="@{/topic/get/topicsforsubject}" th:object="${subject}" method="post">
+                    <input type="hidden" th:value="${subjecta.id}" th:name="id" th:id="id">
+                    <input class="btn btn-secondary btn-large btn-block" type="submit" th:value="${subjecta.name}">
+                    <br><br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<form action="#" th:action="@{/subject/post}" th:object="${subject}" method="post">
+    <div class="container">
+        <input id="forma" type="hidden" class="form-control" th:field="*{name}">
+    </div>
+    <br><br>
+    <div class="col-md-2 ml-md-auto">
+        <input id="button1" class="btn btn-info btn-lg" onclick="javascript:showForm();" type="button"
+               value="ADD SUBJECT">
+    </div>
+    <br>
+    <div class="col-md-2 ml-md-auto">
+        <input id="button2" class="btn btn-info btn-lg" type="hidden" value="SAVE">
+    </div>
+</form>
 </body>
 </html>

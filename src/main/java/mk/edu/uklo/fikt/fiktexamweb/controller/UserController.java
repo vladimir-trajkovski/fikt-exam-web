@@ -1,18 +1,10 @@
 package mk.edu.uklo.fikt.fiktexamweb.controller;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import mk.edu.uklo.fikt.fiktexamweb.model.Subject;
-import mk.edu.uklo.fikt.fiktexamweb.util.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import mk.edu.uklo.fikt.fiktexamweb.model.User;
 import mk.edu.uklo.fikt.fiktexamweb.util.UserService;
 
-//@RestController
 @Controller
 @RequestMapping({"/user"})
 @SessionAttributes
@@ -35,6 +26,8 @@ public class UserController {
         User user = new User();
         model.addAttribute("user", user);
         return "createStudent";
+
+        //$2a$11$HJCn288VmEcueL31eg6cHOPxFS/00A3ZoyABTEKSOIzWR0imswBqm
     }
 
     //show createTeacher.html

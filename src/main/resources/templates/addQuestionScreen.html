@@ -4,33 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 </head>
 <body>
 <script type="text/javascript">
 var counter = 0;
   function onBtnClick()
   {
-    var div = document.createElement('div');
+    counter+=1;
+    var divMd3 = document.createElement('div');
+    var divPrepend1 = document.createElement('div');
+    var spanOptions = document.createElement('span');
     var input = document.createElement('input');
     var divEach = document.getElementById('diveach');
-    div.name='opcii';
+    var divAppend1 = document.createElement('div');
+    var divText = document.createElement('div');
+    var checkbox = document.createElement('input');
+    var divAppend2 = document.createElement('div');
+    var btnRemove = document.createElement('button');
+
+    divMd3.classList.add('input-group');
+    divMd3.classList.add('md-3');
+    divPrepend1.classList.add('input-group-prepend');
+    spanOptions.classList.add('input-group-text');
+    spanOptions.id='inputGroup-sizing-default';
+    spanOptions.innerHTML='Option:';
     input.type='text';
-    input.name='LastName';
-    input.setAttribute("th:field", "*{options[2].text}");
+    input.classList.add('form-control');
+    input.name='options[' + counter + '].text';
+    divAppend1.classList.add('input-group-append');
+    divText.classList.add('input-group-text');
+    checkbox.type='checkbox';
+    checkbox.name='options[' + counter + '].isTrue';
+    divAppend2.classList.add('input-group-append');
+    btnRemove.type='button';
+    btnRemove.classList.add('btn');
+    btnRemove.classList.add('btn-secondary');
+    btnRemove.innerHTML='Remove';
 
-    // var radio = document.createElement('input');
-    // radio.type='radio';
-    // radio.name='radio';
-    var kopce = document.createElement('input');
-    kopce.type='button';
-    kopce.value='-';
-    div.appendChild(input);
-    // div.appendChild(radio);
-    div.appendChild(kopce);
-    divEach.appendChild(div);
-    // kopce.onclick(deleteForm(div.id));
-    counter+=1;
+    divPrepend1.appendChild(spanOptions);
+    divMd3.appendChild(divPrepend1);
+    divMd3.appendChild(input);
+    divText.appendChild(checkbox);
+    divAppend1.appendChild(divText);
+    divMd3.appendChild(divAppend1);
+    divAppend2.appendChild(btnRemove);
+    divMd3.appendChild(divAppend2);
 
+
+    divEach.appendChild(divMd3);
   };
   function deleteForm(id){
     document.getElementById(id).deleteForm();
@@ -38,42 +63,83 @@ var counter = 0;
 
 
 
-
 </script>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/subject/subject-screen">Subjects</a></li>
+        <li class="breadcrumb-item">Topics</li>
+        <li class="breadcrumb-item">Questions</li>
+        <li class="breadcrumb-item">Add Question</li>
+    </ol>
+</nav>
+
+<div class="container">
+    <h2>Add Question:</h2>
+</div>
+
 <form action="#" th:action="@{/question/addquestion}" th:object="${questionAnswers}" method="post">
-    <input type="text" th:field="*{questionText}" class="form-control">
-    <p> -- question text</p>
-    <br>
-    <select th:field="*{topic.id}">
-        <div th:each="topica : ${topics}">
-            <span th:if="${newtopic.name == topica.name}"><option th:text="${topica.name}" th:value="${topica.id}"
-                                                                  selected></option></span>
-            <span th:unless="${newtopic.name == topica.name}"><option th:text="${topica.name}"
-                                                                      th:value="${topica.id}"></option></span>
-        </div>
-    </select>
-    <p> topic </p>
-    <br>
-    <select th:field="*{level}">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
-    <p> level </p>
-    <br>
-    <div id="diveach" th:each="option, i : opcii">
-        <div id="mojdiv" name="opcii">
-            <input type="text" name="LastName" th:field="*{options[__${i.index}__].text}">
-<!--            <input type="radio" name="radio" th:field="*{options[__${i.index}__].isTrue}">-->
-            <input type="button" value="-">
+    <div class="container-fluid">
+        <div class="row">
+            <textarea rows="6" th:field="*{questionText}" class="form-control"
+                      style="resize: none; width: 70%;"></textarea>
+            <div class="offset-md-1">
+                <div class="form-group">
+                    <label class="text-secondary"> topic </label>
+                    <br>
+                    <select class="btn btn-secondary" th:field="*{topic.id}">
+                        <div th:each="topica : ${topics}">
+                            <!--            <option th:text="${newtopic.id}" th:value="${newtopic.id}"></option>-->
+                            <!--            <option th:text="${topica.id}" th:value="${topica.id}"></option>-->
+                            <option th:text="${topica.name}" th:value="${topica.id}"
+                                    th:selected="${newtopic.id == topica.id}"></option>
+                        </div>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="text-secondary"> level </label>
+                    <br>
+                    <select class="btn btn-secondary" th:field="*{level}">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
+    <br><br>
+
+    <label class="text-secondary">Answers</label>
+    <div style="width: 70%;">
+        <div id="diveach" th:each="option, i : opcii">
+            <div class="input-group md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Option:</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Recipient's username"
+                       aria-describedby="basic-addon2" name="options" th:field="*{options[__${i.index}__].text}">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input" name="checkbox"
+                               th:field="*{options[__${i.index}__].isTrue}">
+                    </div>
+                </div>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-secondary">Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <br>
-    <input type="button" onclick="javascript:onBtnClick();" value="Add Answer">
-    <br>
-    <input type="submit">
+    <input type="button" class="btn btn-primary" onclick="javascript:onBtnClick();" value="Add Answer">
+    <br><br>
+    <div class="col-md-3 ml-md-auto">
+        <input class="btn btn-success btn-lg" type="submit">
+    </div>
 </form>
 </body>
 </html>

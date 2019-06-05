@@ -4,7 +4,7 @@ import java.util.List;
 
 import mk.edu.uklo.fikt.fiktexamweb.DTO.QuestionAnswers;
 import mk.edu.uklo.fikt.fiktexamweb.DTO.QuestionOptions;
-import mk.edu.uklo.fikt.fiktexamweb.DTO.TopicQuestions;
+import mk.edu.uklo.fikt.fiktexamweb.DTO.TopicQuestionsOptions;
 import mk.edu.uklo.fikt.fiktexamweb.model.*;
 import mk.edu.uklo.fikt.fiktexamweb.util.OptionsService;
 import mk.edu.uklo.fikt.fiktexamweb.util.QuestionService;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.WebParam;
 import javax.validation.Valid;
 
 @Controller
@@ -47,10 +46,10 @@ public class QuestionController {
 
 	//get all questions for 1 topic
 	@GetMapping("/get/question")
-	public TopicQuestions getQuestionsForTopic(int id, Model model){
-		TopicQuestions topicQuestions = questionService.getByTopic(id);
-		model.addAttribute("topicQuestions", topicQuestions);
-		return topicQuestions;
+	public TopicQuestionsOptions getQuestionsForTopic(int id, Model model){
+		TopicQuestionsOptions topicQuestionsOptions = questionService.getByTopic(id);
+		model.addAttribute("topicQuestionsOptions", topicQuestionsOptions);
+		return topicQuestionsOptions;
 	}
 
 	//TODO -- needs to be retested -- go to screen with questions for testing
@@ -63,7 +62,7 @@ public class QuestionController {
 	//go to screen for adding questions
 	@PostMapping("/addquestionform")
 	public String getQuestionAddForm(Topic topic, Model model){
-		model.addAttribute("topic", topic);
+		model.addAttribute("topicq", topic);
 		Topic newTopic = topicService.getById(topic.getId());
 		Subject subject = subjectService.getById(newTopic.getSubjectId());
 		model.addAttribute("newtopic", newTopic);
@@ -102,6 +101,6 @@ public class QuestionController {
 		model.addAttribute("topics", topics);
 		model.addAttribute("questionAnswers", questionAnswers);
 		questionService.addQuestionAndOptions(questionAnswers);
-		return "P4";
+		return getAddQuestionForm(topicService.getById(questionAnswers.getTopic().getId()), model);
 	}
 }

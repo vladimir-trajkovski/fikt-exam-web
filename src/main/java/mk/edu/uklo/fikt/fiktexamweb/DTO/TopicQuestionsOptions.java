@@ -4,12 +4,12 @@ import mk.edu.uklo.fikt.fiktexamweb.model.Question;
 
 import java.util.List;
 
-public class TopicQuestions {
+public class TopicQuestionsOptions {
 
     private int id;
 
     private String topicName;
-    private List<Question> questions;
+    private List<QuestionOptions> questionOptions;
 
     public int getId() {
         return id;
@@ -27,11 +27,11 @@ public class TopicQuestions {
         this.topicName = topicName;
     }
 
-    public List<Question> getQuestions(){
-        return this.questions;
+    public List<QuestionOptions> getQuestionOptions() {
+        return questionOptions;
     }
 
-    public void setQuestions(List<Question> questions){
-        this.questions = questions;
+    public void setQuestionOptions(List<QuestionOptions> questionOptions) {
+        this.questionOptions = questionOptions;
     }
 }

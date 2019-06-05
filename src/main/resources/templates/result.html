@@ -1,42 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Result</title>
 </head>
-
-<title>Result</title>
-</head>
 <body>
-
-
+<form action="#" th:action="@{/logout}" method="post">
+    <input style="position: absolute; left:93%;" class="btn btn-danger" type="submit" value="logout">
+</form>
+<form>
     <div class="jumbotron text-center">
-        <h1>Result</h1>
-        </div>
-        <div class="container">
-
-        <table class="table">
-                <thead>
-                  <tr class="table-success">
-<th>Correct</th>
-
-                  </tr>
-                  <div class="container">
-
-                  <tr class="table-danger">
-                      <th>Incorrect</th>
-                    </tr>
-                  </div>
-                </thead>
-                <tbody>
-                  <tr>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="page-header">
+            <div class="text-center">
+                <input type="text" class="btn btn-success btn-lg" disabled="disabled" th:value="${result.correct}">
+                <input type="text" class="btn btn-danger btn-lg" disabled="disabled" th:value="${result.incorrect}">
             </div>
-
-            </body>
-            </html>
+        </div>
+    </div>
+</form>
+</body>
+</html>

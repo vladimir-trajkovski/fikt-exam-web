@@ -1,21 +1,15 @@
 package mk.edu.uklo.fikt.fiktexamweb.controller;
 
-import java.security.Principal;
 import java.util.List;
 
-import javax.jws.soap.SOAPBinding;
 import javax.validation.Valid;
 
-import mk.edu.uklo.fikt.fiktexamweb.DTO.SubjectTopics;
 import mk.edu.uklo.fikt.fiktexamweb.DTO.TeacherSubjects;
-import mk.edu.uklo.fikt.fiktexamweb.model.Topic;
-import mk.edu.uklo.fikt.fiktexamweb.model.User;
-import mk.edu.uklo.fikt.fiktexamweb.util.TopicService;
+import mk.edu.uklo.fikt.fiktexamweb.DTO.TestSubject;
+import mk.edu.uklo.fikt.fiktexamweb.model.Test;
 import mk.edu.uklo.fikt.fiktexamweb.util.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +26,10 @@ public class SubjectController {
 	private SubjectService subjectService;
 
 	@Autowired
-	private TopicService topicService;
-
-	@Autowired
 	private UserService userService;
 
 	//go to P2 screen which contains all subjects for authencicated teacher
-	@GetMapping("/subjectscreen")
+	@GetMapping("/subject-screen")
 	public String getSubjects(Model model){
 		getByTeacher(userService.getIdByUsername(
 				SecurityContextHolder.getContext().getAuthentication().getName()),
@@ -49,18 +40,13 @@ public class SubjectController {
 	}
 
 	//go to S2 screen which contains all subjects for student to select on which subject is the test
-	@GetMapping("/studentsubjectscreen")
+	@GetMapping("/student-subject-screen")
 	public String getStudentSubjectScreen(Model model){
-		getAllSubjects(model);
+		List<TestSubject> testSubjects = subjectService.testSubjects();
+		model.addAttribute("testSubjects", testSubjects);
+		Test test = new Test();
+		model.addAttribute("test", test);
 		return "S2";
-	}
-
-	//get all subjects -- needed for S2 screen
-	@GetMapping({"/get"})
-	public List<Subject> getAllSubjects(Model model){
-		List<Subject> subjects = subjectService.getSubjects();
-		model.addAttribute("subjects", subjects);
-		return subjects;
 	}
 
 	//get all subjects for 1 teacher
@@ -71,21 +57,14 @@ public class SubjectController {
 		return teacherSubjects;
 	}
 
-	//TODO -- add a new subject
+	//add a new subject
 	@PostMapping({"/post"})
-	public Subject addSubject(@Valid @RequestBody Subject subject) {
-		return subjectService.createSubject(subject);
-	}
-
-
-	//Get subject and his topics
-	@GetMapping("/get/subjecttopics/{id}")
-	public SubjectTopics getSubjectAndTopics(@PathVariable(name = "id") int id){
-		Subject subject = subjectService.getById(id);
-		List<Topic> topics = topicService.getTopicsForOneSubject((int) id);
-		SubjectTopics subjectTopics = new SubjectTopics();
-		subjectTopics.setSubjectName(subject.getName());
-		subjectTopics.setTopics(topics);
-		return subjectTopics;
+	public String addSubject(@Valid Subject subject, Model model) {
+		model.addAttribute("subject", subject);
+		subject.setId(0);
+		subject.setTeacherId(userService
+				.getIdByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+		subjectService.createSubject(subject);
+		return getSubjects(model);
 	}
 }

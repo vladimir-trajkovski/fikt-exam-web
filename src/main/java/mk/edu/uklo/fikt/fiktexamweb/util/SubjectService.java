@@ -1,25 +1,38 @@
 package mk.edu.uklo.fikt.fiktexamweb.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import mk.edu.uklo.fikt.fiktexamweb.DTO.TeacherSubjects;
+import mk.edu.uklo.fikt.fiktexamweb.DTO.TestSubject;
+import mk.edu.uklo.fikt.fiktexamweb.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
-
-import mk.edu.uklo.fikt.fiktexamweb.model.Subject;
 
 
 @Service
 public class SubjectService {
 	
 	@Autowired
-	SubjectRepository subjectRepository;
+	private SubjectRepository subjectRepository;
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
+
+	@Autowired
+	private CombinationRepository combinationRepository;
+
+	@Autowired
+	private QuestionRepository questionRepository;
+
+	@Autowired
+	private TopicRepository topicRepository;
+
+	@Autowired
+	private TestRepository testRepository;
 	
 	//get all subjects
 	public List<Subject> getSubjects(){
@@ -50,6 +63,22 @@ public class SubjectService {
 	//get subject by id
 	public Subject getById(int id){
 		return subjectRepository.findById(id).get();
+	}
+
+	public List<TestSubject> testSubjects(){
+		List<Test> testIds = testRepository.findAll();
+		List<TestSubject> testSubjects = new ArrayList<>();
+		for (int i = 0; i<testIds.size(); i++){
+			Combination combination = combinationRepository.findByTestId(testIds.get(i).getId()).get(0);
+			Question question = questionRepository.findById(combination.getQuestionId()).get();
+			Topic topic = topicRepository.findById(question.getTopicId()).get();
+			Subject subject = subjectRepository.findById(topic.getSubjectId()).get();
+			TestSubject testSubject = new TestSubject();
+			testSubject.setSubjectName(subject.getName());
+			testSubject.setTestId(testIds.get(i).getId());
+			testSubjects.add(testSubject);
+		}
+		return testSubjects;
 	}
 
 }
