@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Question</title>
+</head>
+<body style="overflow-x: hidden;">
+
+<script type="text/javascript">
+    var counter = 0
+    function moveRight(){
+    document.getElementById(counter).style.left="50%";
+    counter+=1;
+    };
+    var drugCounter = 0;
+    function goToNext(){
+    drugCounter+=1;
+    window.location.href="#" + drugCounter;
+    };
+</script>
+<form action="#" th:action="@{/test/submit}" th:object="${options}" method="post">
+    <div th:each="list, i : ${lista}">
+        <div th:id="${i.index}" style="position:absolute; border: 1px solid red; width:100%; height:100%; left:000%"
+             class="container-fluid">
+            <h1 id="prasanje" th:text="${list.questionText}" class="display-4"></h1>
+            <div class="mx-auto" style="border: 1cm tan solid; border-radius: 5mm; width: 80%">
+                <br><br>
+
+                <div class="radio" th:each="option : ${list.options}">
+                    <div class="container">
+                        <h4><input type="radio" th:value="${option.id}" th:id="optionsList[__${i.index}__].id"
+                                   th:name="optionsList[__${i.index}__].id" th:text="${option.text}"></h4>
+                    </div>
+                    <br><br>
+                </div>
+                <button type="button" onclick="javascript:goToNext();" class="btn btn-primary float-right">Next
+                </button>
+                <button id="btn1" type="submit" class="btn btn-success float-right">Finish</button>
+                <script type="text/javascript">
+    document.getElementById(counter).style.left=counter + "00%";
+    counter+=1;
+                </script>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!--<div class="mx-auto" style="border: 1cm tan solid; border-radius: 5mm; width: 80%">-->
+<!--    <br><br>-->
+<!--    <div class="container">-->
+<!--        <div th:each="topica : ${subjectTopics.topics}">-->
+<!--            <div class="col-xs-3">-->
+<!--                <form action="#" th:action="@{/question/question}" th:object="${topic}" method="post">-->
+<!--                    <input type="hidden" th:value="${topica.id}" th:name="id" th:id="id">-->
+<!--                    <input class="btn btn-secondary btn-large btn-block" type="submit" th:value="${topica.name}">-->
+<!--                    <br><br>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+</body>
+</html>
+

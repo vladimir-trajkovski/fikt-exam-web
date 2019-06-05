@@ -1,48 +1,70 @@
 package mk.edu.uklo.fikt.fiktexamweb.controller;
 
-import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import mk.edu.uklo.fikt.fiktexamweb.model.User;
-import mk.edu.uklo.fikt.fiktexamweb.util.UserBL;
+import mk.edu.uklo.fikt.fiktexamweb.util.UserService;
 
-@RestController
+@Controller
 @RequestMapping({"/user"})
+@SessionAttributes
 public class UserController {
-	
-	@Autowired
-	UserBL userBl;
 
+    @Autowired
+    UserService userService;
 
-	//maybe won't be used
-	@GetMapping({"/get"})
-	public List<User> getAllUsers(){
-		return userBl.getAllUsers();
-	}
-	
-	@PostMapping({"/post/teacher"})
-	public User addTeacher(@Valid @RequestBody User user) {
-		return userBl.createTeacher(user);
-	}
-	
-	@PostMapping({"/post/student"})
-	public User addStudent(@Valid @RequestBody User user) {
-		return userBl.createStudent(user);
-	}
+    //show createStudent.html
+    @GetMapping("/addstudent")
+    public String showForm(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        return "createStudent";
 
+        //$2a$11$HJCn288VmEcueL31eg6cHOPxFS/00A3ZoyABTEKSOIzWR0imswBqm
+    }
 
-	//maybe needs to be deleted
-	@GetMapping("get/asd")
-	public Optional<User> getByUsername(String username){
-		return userBl.lista(username);
-	}
+    //show createTeacher.html
+    @GetMapping("/addteacher")
+    public String showTeacherForm(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        return "createTeacher";
+    }
+
+    //show adminui.html
+    @GetMapping("/adminform")
+    public String showAdminForm(Model model) {
+        User user = userService.getByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        model.addAttribute("imeprezime", user.getImePrezime());
+        return "adminui";
+    }
+
+    //show login form
+    @GetMapping("/login")
+    public String showLoginForm(Model model) {
+        return "login";
+    }
+
+    //create a teacher
+    @PostMapping({"/post/teacher"})
+    public String addTeacher(@Valid @RequestBody @ModelAttribute(value = "user") User user, Model model) {
+        model.addAttribute("user", user);
+        userService.createTeacher(user);
+        return "adminui";
+    }
+
+    //create a student
+    @PostMapping({"/post/student"})
+    public String addStudent(@Valid @RequestBody @ModelAttribute(value = "user") User user, Model model) {
+        model.addAttribute("user", user);
+        userService.createStudent(user);
+        return "adminui";
+    }
 }

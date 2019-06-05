@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Create Student</title>
+    <title>Create Student</title>
+</head>
+<body>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/user/adminform">Admin</a></li>
+        <li class="breadcrumb-item"><a href="/user/addstudent">Add Student</a></li>
+    </ol>
+</nav>
+
+<form action="#" th:action="@{/user/post/student}" th:object="${user}" method="post">
+    <div class="jumbotron text-left">
+        <h1>Create Student</h1>
+        <div class="form-group">
+            <label class="text-secondary">Enter student's Name and Surname:</label>
+            <input type="text" th:field="*{imePrezime}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="text-secondary">Enter student's Index:</label>
+            <input type="text" th:field="*{brIndex}" th:name="brIndex" class="form-control" index="index">
+        </div>
+        <div class="form-group">
+            <label class="text-secondary">Enter student's Email:</label>
+            <input type="text" th:field="*{email}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="text-secondary" for="usr">Enter student's Username:</label>
+            <input type="text" th:field="*{username}" class="form-control" id="usr" name="username">
+        </div>
+        <div class="form-group">
+            <label class="text-secondary" for="pwd">Enter student's Password:</label>
+            <input type="password" th:field="*{password}" class="form-control" id="pwd" name="password">
+        </div>
+        <br>
+        <div class="form-group">
+            <input type="submit" class="btn btn-success">
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

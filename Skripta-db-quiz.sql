@@ -39,8 +39,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `quiz_db`.`test` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `start` DATETIME NOT NULL,
-  `end` DATETIME NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -54,6 +52,8 @@ CREATE TABLE IF NOT EXISTS `quiz_db`.`testing` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `studentId` INT(11) NOT NULL,
   `testId` INT(11) NOT NULL,
+  `start` DATETIME NOT NULL,
+    `end` DATETIME NOT NULL,
   `score` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_testing_user1_idx` (`studentId` ASC) VISIBLE,

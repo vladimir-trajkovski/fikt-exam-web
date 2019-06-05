@@ -4,58 +4,67 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import mk.edu.uklo.fikt.fiktexamweb.DTO.SubjectTopics;
-import mk.edu.uklo.fikt.fiktexamweb.model.Topic;
-import mk.edu.uklo.fikt.fiktexamweb.util.TopicBL;
+import mk.edu.uklo.fikt.fiktexamweb.DTO.TeacherSubjects;
+import mk.edu.uklo.fikt.fiktexamweb.DTO.TestSubject;
+import mk.edu.uklo.fikt.fiktexamweb.model.Test;
+import mk.edu.uklo.fikt.fiktexamweb.util.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import mk.edu.uklo.fikt.fiktexamweb.model.Subject;
-import mk.edu.uklo.fikt.fiktexamweb.model.User;
-import mk.edu.uklo.fikt.fiktexamweb.util.SubjectBL;
+import mk.edu.uklo.fikt.fiktexamweb.util.SubjectService;
 
-@RestController
+@Controller
 @RequestMapping({"/subject"})
+@SessionAttributes
 public class SubjectController {
 	
 	@Autowired
-	SubjectBL subjectBl;
+	private SubjectService subjectService;
 
 	@Autowired
-	TopicBL topicBL;
-	
-	@PreAuthorize("hasAnyRole('Admin')")
-	@GetMapping({"/get"})
-	public List<Subject> getAllSubjects(){
-		return subjectBl.getSubjects();
-	}
-	
-//	@GetMapping({"/get/byteacher"})
-//	public List<Subject> getSubjectsByTeacher(String teacherUsername){
-//		return subjectBl.getSubjectsByProfessor(teacherUsername);
-//	}
+	private UserService userService;
 
-	//needs to be deleted
-	@GetMapping("/get/byname")
-	public List<Subject> getBySubjectName(long name){
-		return subjectBl.getSubjectByName(name);
+	//go to P2 screen which contains all subjects for authencicated teacher
+	@GetMapping("/subject-screen")
+	public String getSubjects(Model model){
+		getByTeacher(userService.getIdByUsername(
+				SecurityContextHolder.getContext().getAuthentication().getName()),
+				model);
+		Subject subject = new Subject();
+		model.addAttribute("subject", subject);
+		return "P2";
 	}
-	
+
+	//go to S2 screen which contains all subjects for student to select on which subject is the test
+	@GetMapping("/student-subject-screen")
+	public String getStudentSubjectScreen(Model model){
+		List<TestSubject> testSubjects = subjectService.testSubjects();
+		model.addAttribute("testSubjects", testSubjects);
+		Test test = new Test();
+		model.addAttribute("test", test);
+		return "S2";
+	}
+
+	//get all subjects for 1 teacher
+	@GetMapping({"/get/byteacher"})
+	public TeacherSubjects getByTeacher(int teacherId, Model model){
+		TeacherSubjects teacherSubjects = subjectService.getByTeacher(teacherId);
+		model.addAttribute("teacherSubjects", teacherSubjects);
+		return teacherSubjects;
+	}
+
+	//add a new subject
 	@PostMapping({"/post"})
-	public Subject addSubject(@Valid @RequestBody Subject subject) {
-		return subjectBl.createSubject(subject);
-	}
-
-
-	//FINAL -- Get subject and his topics
-	@GetMapping("/get/subjecttopics/{id}")
-	public SubjectTopics getSubjectAndTopics(@PathVariable(name = "id") long id){
-		Subject subject = subjectBl.getById(id);
-		List<Topic> topics = topicBL.getTopicsForSubject(id);
-		SubjectTopics subjectTopics = new SubjectTopics();
-		subjectTopics.setSubjectName(subject.getName());
-		subjectTopics.setTopics(topics);
-		return subjectTopics;
+	public String addSubject(@Valid Subject subject, Model model) {
+		model.addAttribute("subject", subject);
+		subject.setId(0);
+		subject.setTeacherId(userService
+				.getIdByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+		subjectService.createSubject(subject);
+		return getSubjects(model);
 	}
 }

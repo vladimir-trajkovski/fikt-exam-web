@@ -11,18 +11,18 @@ public class Subject {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 
 	private String name;
 
 	@Column(name = "teacherId")
-	private Long teacherId;
+	private int teacherId;
 	
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -33,11 +33,11 @@ public class Subject {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Long getTeacherId() {
+	public int getTeacherId() {
 		return teacherId;
 	}
 
-	public void setTeacherId(Long teacherId) {
+	public void setTeacherId(int teacherId) {
 		this.teacherId = teacherId;
 	}
 	

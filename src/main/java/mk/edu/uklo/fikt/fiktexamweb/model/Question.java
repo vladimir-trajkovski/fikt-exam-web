@@ -14,19 +14,21 @@ public class Question {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 	
 	private String text;
 	private String level;
-	private Long topicId;
-	
-	
-	public Long getId() {
+	private int topicId;
+
+
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+
+	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getText() {
 		return text;
 	}
@@ -39,10 +41,10 @@ public class Question {
 	public void setLevel(String level) {
 		this.level = level;
 	}
-	public Long getTopicId() {
+	public int getTopicId() {
 		return topicId;
 	}
-	public void setTopicId(Long topicId) {
+	public void setTopicId(int topicId) {
 		this.topicId = topicId;
 	}
 	

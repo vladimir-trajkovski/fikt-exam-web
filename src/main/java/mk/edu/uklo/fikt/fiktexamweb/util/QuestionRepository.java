@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 @Repository
-public interface QuestionRepository extends JpaRepository<Question, Long>{
-    List<Question> findByTopicId(long subjectId);
-
+public interface QuestionRepository extends JpaRepository<Question, Integer>{
+    List<Question> findByTopicId(int subjectId);
 }

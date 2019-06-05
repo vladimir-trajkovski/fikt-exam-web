@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<form action="#" th:action="@{/logout}" method="post">
+    <input style="position: absolute; left:93%;" class="btn btn-danger" type="submit" value="logout">
+</form>
+<div class="mx-auto" style="border: 1cm tan solid; border-radius: 5mm; width: 80%">
+    <br><br>
+    <div class="container">
+        <div th:each="subject : ${testSubjects}">
+            <div class="col-xs-3">
+                <form action="#" th:action="@{/test/get}" th:object="${test}" method="post">
+                    <input type="hidden" th:value="${subject.testId}" th:id="id" th:name="id">
+                    <input class="btn btn-secondary btn-lg btn-block" type="submit" th:value="${subject.subjectName}">
+                    <br><br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

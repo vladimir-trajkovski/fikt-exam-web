@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+</head>
+<body style="background-color: #d2dde8">
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/subject/subject-screen">Subjects</a></li>
+        <li class="breadcrumb-item">Topics</li>
+        <li class="breadcrumb-item">Questions</li>
+    </ol>
+</nav>
+<div class="jumbotron text-center">
+    <div class="page-header">
+        <h1 th:text="${topicQuestionsOptions.topicName}"></h1>
+    </div>
+</div>
+
+<div class="accordion" id="accordionExample">
+    <div th:each="questionOption, i : ${topicQuestionsOptions.questionOptions}">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" th:attr="data-target='#' + ${i.index}"
+                            aria-expanded="false" aria-controls="collapseOne">
+                        [[${questionOption.questionText}]]
+                    </button>
+                </h5>
+            </div>
+
+            <div th:id="${i.index}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <div th:each="option : ${questionOption.options}">
+                        <p th:if="${option.isTrue}" class="text-success">[[${option.text}]]</p>
+                        <p th:unless="${option.isTrue}" class="text-danger">[[${option.text}]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="col-md-2 ml-md-auto">
+    <form action="#" th:action="@{/question/addquestionform}" th:object="${topic}" method="post">
+        <input type="hidden" th:value="${topicQuestionsOptions.id}" th:field="*{id}">
+        <input class="btn btn-lg btn-info" type="submit" value="ADD QUESTION">
+    </form>
+</div>
+
+</body>
+</html>
